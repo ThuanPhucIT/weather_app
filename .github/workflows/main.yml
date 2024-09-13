@@ -29,13 +29,7 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-
-    - name: Create .ssh directory
-      run: mkdir -p ~/.ssh
-
-    - name: Add WSL to known_hosts
-      run: ssh-keyscan -H ${{ secrets.WSL_IP }} >> ~/.ssh/known_hosts
-
+      
     - name: Set up SSH key
       run: |
         echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
