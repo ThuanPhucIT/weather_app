@@ -29,6 +29,9 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+
+    - name: Create .ssh directory
+      run: mkdir -p ~/.ssh
       
     - name: Set up SSH key
       run: |
