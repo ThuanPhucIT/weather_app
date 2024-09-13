@@ -38,6 +38,10 @@ jobs:
         echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
 
+    - name: Debug SSH Connection
+      run: |
+        ssh -i ~/.ssh/id_rsa -vvv user@${{ secrets.WSL_IP }} || true
+
     - name: Deploy to WSL
       run: |
         ssh -i ~/.ssh/id_rsa user@${{ secrets.WSL_IP }} << 'EOF'
