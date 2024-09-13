@@ -30,20 +30,20 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Start SSH agent and add SSH key
-      uses: webfactory/ssh-agent@v0.5.4
-      with:
-        ssh-private-key: ${{ secrets.SSH_KEY }}
-
     - name: Create .ssh directory
       run: mkdir -p ~/.ssh
 
     - name: Add WSL to known_hosts
       run: ssh-keyscan -H ${{ secrets.WSL_IP }} >> ~/.ssh/known_hosts
 
+    - name: Set up SSH key
+      run: |
+        echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+
     - name: Deploy to WSL
       run: |
-        ssh user@${{ secrets.WSL_IP }} << 'EOF'
+        ssh -i ~/.ssh/id_rsa user@${{ secrets.WSL_IP }} << 'EOF'
           docker pull ${{ secrets.DOCKERHUB_USER }}/weather_forecast:v1
           docker stop weather_forecast || true
           docker rm weather_forecast || true
